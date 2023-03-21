@@ -3,6 +3,7 @@
 from math import factorial, sqrt
 from statistics import *
 from itertools import permutations, combinations, combinations_with_replacement
+from scipy import stats
 import pandas as pd
 import numpy as np
 
@@ -137,3 +138,43 @@ poisson_standard_deviation = sqrt(μ)
 print('Probability (pois. dist.): ', poisson_probability)
 print('Mean (μ) (pois. dist.): ', μ)
 print('Standard Deviation (pois. dist.): ', poisson_standard_deviation)
+
+
+
+print('\nSTANDARD NORMAL DISTRIBUTION')
+
+# Where mean = 0, standard_deviation = 1 and shaded_area = x
+
+# Usage
+# Returns area to the left
+x = 1.13
+print(f'Probability P(z < {x}) (norm. dist.):', stats.norm.cdf(x))
+
+# Probability that z lies between 0 and x, where x is a point on the graph
+def z_between_0_and_x(x):
+    # 0 = Mean
+    print(f'P({0} < z < {x})')
+    print(f'P({0} < z < {x}) - P(z < {0})')
+
+    return stats.norm.cdf(x) - stats.norm.cdf(0)
+
+# Probability that z lies between 0 and x, where x is a point on the graph
+def z_between_x_and_y(x, y):
+    print(f'P({x} < z < {y})')
+    return stats.norm.cdf(x) - stats.norm.cdf(y)
+
+# Usage
+x = 3.01
+print(f'Probability that z lies between 0 and {x}:', z_between_0_and_x(x))
+
+# Usage
+x = -1.56
+y = 4.56
+print(f'Probability that z lies between {x} and {y}:', z_between_x_and_y(x,y))
+
+def z_geater_than_x(x):
+    return 1 - stats.norm.cdf(x)
+
+# Usage
+x = 0.59
+print(f'z_geater_than_x:', z_geater_than_x(x))
