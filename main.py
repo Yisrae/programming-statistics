@@ -49,8 +49,8 @@ def nPr(n, r):
 def nCr(n, r):
     return int(factorial(n)/(factorial(n-r)* factorial(r)))
 
-# Return square of each list element
-def _squareArr(list):
+# Return squared value of each list element
+def _square_list(list):
     return [i ** 2 for i in list]
 
 # Example usage
@@ -72,67 +72,68 @@ print('nCr:', nCr(n, r))
 
 print('\nPROBABILITY DISTRIBUTION')
 
-randomVariableX = [0,1,2,3]
-probX = [0.46,0.41,0.09,0.04]
-
-xProbX = [a * b for a, b in zip(randomVariableX, probX)]
+x = [0,1,2,3] # Random variables
+x_probability = [0.46,0.41,0.09,0.04] # Random variables probabilities
+x_multiply_x_probability = [a * b for a, b in zip(x, x_probability)]
 
 d = {
-     'x': randomVariableX,
-     'P(x)': probX,
-     'xP(x)': xProbX
+     'x': x,
+     'P(x)': x_probability,
+     'xP(x)': x_multiply_x_probability
  }
 
 df = pd.DataFrame(data=d)
+total_p_x = np.sum(x_probability) # Probability
+total_x_p_x = np.sum(x_multiply_x_probability) # Mean
+x_squared = _square_list(x)
+x_squared_multiply_x_probability = [a * b for a, b in zip(x_squared, x_probability)]
+x_squared_multiply_x_probability_total = np.sum(x_squared_multiply_x_probability)
+variance = x_squared_multiply_x_probability_total - (total_x_p_x ** 2)
+standard_deviation = sqrt(variance)
+
 print(df)
-
-print('\nTotal P(x): ', np.sum(probX))
-xProbXMean = np.sum(xProbX)
-print('Total xP(x) / Mean: ', xProbXMean)
-
-sqrRandVarXArr = _squareArr(randomVariableX)
-
-sqrProbX = [a * b for a, b in zip(sqrRandVarXArr, probX)]
-
-sumSqrProbX = np.sum(sqrProbX)
-
-std_dvt = sumSqrProbX - (xProbXMean ** 2)
-standard_deviation = sqrt(std_dvt)
-
-print('Standard Deviation (prod. dist.): ', standard_deviation)
+print('\nTotal P(x): ', total_p_x)
+print('Total xP(x) / Mean (μ): ', total_x_p_x)
+print('Standard Deviation (prob. dist.): ', standard_deviation)
 
 
 # Only works for exact values
 print('\nBINOMIAL DISTRIBUTION')
 
-nVal = 6
-rVal = 3 # same as xVal
-pVal = 0.3
-qVal = 1 - pVal
+n = 6 # Denotes the fixed number of trials
+x = 3 # Denotes a specific number of successes in n trials
+p = 0.3 # Denotes the probability of success in one of the n trials
+q = 1 - p # Denotes the probability of failure in one of the n trials
 
-binProb = nCr(nVal, rVal) * (pVal ** rVal) * (qVal ** (nVal - rVal))
-stdBinProb = sqrt(nVal * pVal * qVal)
-meanBinProb = nVal * pVal
+binomial_probability = nCr(n, x) * (p ** x) * (q ** (n - x))
+μ = n * p
+variance = μ * q
+binomial_standard_deviation = sqrt(variance)
 
-print('Probability (bin. dist.): ', binProb)
-print('Standard Deviation (bin. dist.): ', stdBinProb)
-print('Mean (bin. dist.): ', meanBinProb)
+print('Probability (bin. dist.): ', binomial_probability)
+print('Mean (μ) (bin. dist.): ', μ)
+print('Variance (bin. dist.): ', variance)
+print('Standard Deviation (bin. dist.): ', binomial_standard_deviation)
 
 
 # Only works for exact values
 print('\nPOISSON DISTRIBUTION')
-nVal = 14000
-pVal = 0.00003
-muVal = nVal * pVal
-xVal = 1
-eVal = 2.71828 # Approximately
+n = 14000 # Sample size
+p = 0.00003 # Probability
+μ = n * p # Mean
+x = 1 # Number of occurrences of an event over some interval
+E = 2.71828 # Approximately
 
-if (nVal >= 100) == False:
+# When approximating the Binomial distribution
+if (n >= 100) == False:
     exit('Fail n > 100 check')
 
-if (muVal <= 10) == False:
+if (μ <= 10) == False:
     exit('Fail mean < 10 check')
 
-poissonProb = ((muVal ** xVal) * (eVal ** -muVal)) / factorial(xVal)
+poisson_probability = ((μ ** x) * (E ** -μ)) / factorial(x)
+poisson_standard_deviation = sqrt(μ)
 
-print('Probability (pois. dist.): ', poissonProb)
+print('Probability (pois. dist.): ', poisson_probability)
+print('Mean (μ) (pois. dist.): ', μ)
+print('Standard Deviation (pois. dist.): ', poisson_standard_deviation)
