@@ -301,6 +301,7 @@ elif '=' in H1:
 
 # Test statistic
 if not has_population_standard_deviation:
+    # TODO Add alternate calculation
     s = 0 # A different value
 else:
     s = population_standard_deviation
