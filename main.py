@@ -140,8 +140,13 @@ print('Mean (μ) (pois. dist.): ', μ)
 print('Standard Deviation (pois. dist.): ', poisson_standard_deviation)
 
 
+print('\nNORMAL DISTRIBUTION')
+# NOTE:
+# Normal distribution highlights data values
 
 print('\nSTANDARD NORMAL DISTRIBUTION')
+# NOTE:
+# Standard normal distribution highlights z scores
 
 # Where mean = 0, standard_deviation = 1 and shaded_area = x
 
@@ -178,3 +183,30 @@ def z_geater_than_x(x):
 # Usage
 x = 0.59
 print(f'z_geater_than_x:', z_geater_than_x(x))
+
+# Finding percentage of data more than x standard deviations
+# below the mean or more than x standard deviations above the mean
+# x = standard deviations below mean
+# y = standard deviations above mean
+def percentage_of_data(x, y):
+    print(f'1 - P(z < {x}) + P(z < {-y})')
+    return (1 - stats.norm.cdf(x)) + stats.norm.cdf(-y)
+
+x = 2
+y = 3
+print('Percentage of data:', percentage_of_data(x, y))
+
+print('\nCONFIDENCE INTERVALS')
+# Where one population
+
+p̂ = None
+E = None
+q̂ = None
+z = 0.005 # Z alpha/2
+
+def indicated_value(z):
+    area_to_the_left = 1 - z 
+    return stats.norm.ppf(area_to_the_left)
+
+# Usage
+print('Indicated value:', indicated_value(z))
