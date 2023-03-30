@@ -210,3 +210,115 @@ def indicated_value(z):
 
 # Usage
 print('Indicated value:', indicated_value(z))
+
+print('\nTEST STATISTICS (ONE POPULATION)')
+
+# Is the population standard deviation know?
+# Is the distribution left tailed, right tailed or 2 tailed?
+# Is normal or t distribution ?
+# If 2 tailed, divide level of significance by 2
+
+is_left_tailed = False
+is_right_tailed = False
+is_two_tailed = False
+is_normal_distribution = False
+is_t_distribution = False
+has_population_standard_deviation = True
+p_value = None
+
+print('#### Operators #### \n 0 for = \n 1 for < \n 2 for > \n 3 for <= \n 4 for >= \n 5 for != \n')
+
+operators = ['=', '<', '>', '<=', '>=', '!=']
+claim_value = float(input('Enter claim value: '))
+operator = int(input('Enter claim operator: '))
+
+H0 = f'H0: μ {operators[operator]} {claim_value}'
+
+match operator:
+    case 0:
+        H1 = f'H1: μ {operators[5]} {claim_value}'
+    case 1:
+        H1 = f'H1: μ {operators[2]} {claim_value}'
+    case 2:
+        H1 = f'H1: μ {operators[1]} {claim_value}'
+    case 3:
+        H1 = f'H1: μ {operators[4]} {claim_value}'
+    case 4:
+        H1 = f'H1: μ {operators[3]} {claim_value}'
+    case 5:
+        H1 = f'H1: μ {operators[0]} {claim_value}'
+    case _:
+        print("invalid operator")
+        exit()
+
+print(H0)
+print(H1)
+
+random_sample = int(input('Enter random sample: '))
+
+mean_x = float(input('Enter mean x (x = placeholder variable): '))
+population_standard_deviation = input('Enter population standard deviation or None: ')
+
+if not population_standard_deviation:
+    has_population_standard_deviation = False
+    print('No population standard devation.')
+else:
+    population_standard_deviation = float(population_standard_deviation)
+
+if random_sample >= 30 and population_standard_deviation:
+    is_normal_distribution = True
+    print('Random sample is greater than 30 and population standard deviation is present; therefore, we will use normal distrubition')
+else:
+    is_t_distribution = True
+    print('Random sample is less than 30 and population standard deviation is NOT present; therefore, we will use t distrubition')
+
+
+level_of_significance = float(input('Enter level of significance: '))
+
+
+# Distribution type
+if '<' in H1:
+    is_left_tailed = True
+    critical_value_1 = stats.norm.ppf(level_of_significance)
+    print('Distribution is left tailed')
+    print('Critical value: ', critical_value_1)
+elif '>' in H1:
+    is_right_tailed = True
+    critical_value_1 = stats.norm.cdf(level_of_significance)
+    print('Distribution is right tailed')
+    print('Critical value: ', critical_value_1)
+elif '=' in H1:
+    is_two_tailed = True
+    print('Distribution is two tailed')
+    print('Level of significance is divide by 2 since the distribution is two tailed')
+    area_in_left_tail = round((level_of_significance / 2), 4)
+    area_in_right_tail = area_in_left_tail
+    print(f'Area in left tail: {area_in_left_tail} || Area in right tail {area_in_right_tail}')
+    critical_value_left = round(stats.norm.ppf(area_in_left_tail), 4)
+    critical_value_right = -critical_value_left # Negative of
+    print(f'Critical values: {critical_value_left} and {critical_value_right}')
+
+
+# Test statistic
+if not has_population_standard_deviation:
+    s = 0 # A different value
+else:
+    s = population_standard_deviation
+
+z_obtain = round((mean_x - claim_value) / (s / sqrt(random_sample)), 4)
+print('Z-obt:', z_obtain)
+
+if is_left_tailed or is_right_tailed:
+    p_value = round(stats.norm.cdf(z_obtain), 4)
+    print('P-value for left or right tail:', p_value)
+else:
+    p_value = round(stats.norm.cdf(z_obtain), 4)
+    area_in_left_tail = round(1 - p_value, 4)
+    area_in_right_tail = area_in_left_tail
+    print(f'Value in left tail {area_in_left_tail} || Value in right tail {area_in_right_tail}')
+    print('P-value:', area_in_left_tail * 2)
+
+if (1 - p_value) * 2 < level_of_significance:
+    print('Reject the null.\nThere is not enough significant evidence to support the claim')
+else:
+    print('Failed to reject the null.\nThere is enough significant evidence to support the claim')
