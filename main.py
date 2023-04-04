@@ -206,7 +206,7 @@ z = 0.005 # Z alpha/2
 
 def indicated_value(z):
     area_to_the_left = 1 - z 
-    return stats.norm.ppf(area_to_the_left)
+    return round(stats.norm.ppf(area_to_the_left), 4)
 
 # Usage
 print('Indicated value:', indicated_value(z))
