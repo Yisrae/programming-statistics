@@ -196,6 +196,14 @@ x = 2
 y = 3
 print('Percentage of data:', percentage_of_data(x, y))
 
+# TODO Add Implementation
+# print('\nAPPROXIMATIONS')
+# Continuos to Discrete
+# Discrete to Continueous
+
+# TODO Add Implementation
+# print('\nCONTINUTY CORRECTION')
+
 print('\nCONFIDENCE INTERVALS')
 # Where one population
 
